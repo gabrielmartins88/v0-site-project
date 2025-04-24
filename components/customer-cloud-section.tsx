@@ -14,7 +14,7 @@ export default function CustomerCloudSection() {
       </div>
       <div className="md:w-1/2">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
-          Nexus Solutions Cloud <span className="font-normal">é sua nuvem de clientes. Tudo em um só lugar</span>
+          Nexus Solutions <span className="font-normal"> Tudo em um só lugar</span>
         </h2>
         <p className="text-gray-600 mb-6">
           Uma solução unificada e multicanal que permite que sua empresa gerencie e proporcione experiências pessoais,
