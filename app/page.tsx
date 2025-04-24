@@ -80,8 +80,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#0066cc] to-[#00a3ff] opacity-50 rounded-full blur-[100px] transform -translate-x-1/4"></div>
             <video
             src="/chamada-home.MP4"
-            autoPlay
-            loop
+            controls
             playsInline
             className="relative z-10 w-full max-w-[600px] rounded-lg shadow-lg"
             />
