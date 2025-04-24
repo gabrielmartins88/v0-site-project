@@ -82,7 +82,6 @@ export default function Home() {
             src="/chamada-home.MP4"
             autoPlay
             loop
-            muted
             playsInline
             className="relative z-10 w-full max-w-[600px] rounded-lg shadow-lg"
             />
