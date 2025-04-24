@@ -78,13 +78,21 @@ export default function Home() {
           </div>
           <div className="md:w-1/2 relative mt-10 md:mt-0">
             <div className="absolute inset-0 bg-gradient-to-r from-[#0066cc] to-[#00a3ff] opacity-50 rounded-full blur-[100px] transform -translate-x-1/4"></div>
-            <Image
+            <video
+            src="/videos/chamada-home.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="relative z-10 w-full max-w-[600px] rounded-lg shadow-lg"
+            />
+            {/*<Image
               src="/placeholder.svg?height=500&width=600"
               alt="Customer Experience"
               width={600}
               height={500}
               className="relative z-10"
-            />
+            />-->*/}
           </div>
         </div>
       </section>
