@@ -99,7 +99,7 @@ export default function Home() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
-            Mais de 12.000 clientes moldando um novo mundo de experiências
+            Clientes que estão moldando um novo mundo de experiências
           </h2>
         </div>
         <AutoScrollingLogos />

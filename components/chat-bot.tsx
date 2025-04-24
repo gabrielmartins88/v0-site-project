@@ -52,7 +52,7 @@ export default function ChatBot() {
         <div className="bg-[#0a192f] text-white p-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5" />
-            <h3 className="font-medium">Nexus Solutions Assistant</h3>
+            <h3 className="font-medium">Agente X</h3>
           </div>
           <Button
             variant="ghost"
