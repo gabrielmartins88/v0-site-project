@@ -70,7 +70,7 @@ export default function Home() {
       <section className="bg-[#0a192f] text-white relative overflow-hidden">
         <div className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Elevando a Eficiência Empresarial com a Nexus Solutions</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Elevando a Eficiência Empresarial com a Nexus</h1>
             <p className="text-xl md:text-2xl mb-6">
               Desbloqueie o potencial do seu negócio com soluções de automação avançadas, integrando inteligência artificial para otimizar a comunicação e maximizar resultados.
             </p>
