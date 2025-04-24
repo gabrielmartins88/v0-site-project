@@ -74,9 +74,6 @@ export default function Home() {
             <p className="text-xl md:text-2xl mb-6">
               Desbloqueie o potencial do seu negócio com soluções de automação avançadas, integrando inteligência artificial para otimizar a comunicação e maximizar resultados.
             </p>
-            <p className="mb-8 text-gray-300">
-              Impulsione a jornada do seu cliente da atração ao pós-venda com uma solução de IA completa.
-            </p>
             <Button className="bg-[#0066cc] hover:bg-[#0052a3] text-white px-8 py-6">SAIBA COMO</Button>
           </div>
           <div className="md:w-1/2 relative mt-10 md:mt-0">
