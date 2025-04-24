@@ -21,6 +21,42 @@ export default function CustomerCloudSection() {
           envolventes e fluidas para seus clientes.
         </p>
       </div>
+      <section className="mt-16 w-full" id="services">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+          <i className="fas fa-cogs animate-spin mr-2 text-blue-600" /> 
+          Soluções Estratégicas para o Crescimento do Seu Negócio
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <div className="p-6 bg-white rounded-lg shadow-md flex gap-4">
+            <i className="fas fa-robot text-3xl text-blue-600 animate-pulse" />
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Agente X</h3>
+              <p>Implemente uma automação inteligente no WhatsApp que opera ininterruptamente, proporcionando respostas personalizadas e otimizando o atendimento ao cliente com precisão e eficiência.</p>
+            </div>
+          </div>
+          <div className="p-6 bg-white rounded-lg shadow-md flex gap-4">
+            <i className="fas fa-bullhorn text-3xl text-blue-600 animate-bounce" />
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Tráfego Pago</h3>
+              <p>Desenvolva campanhas publicitárias altamente segmentadas que capturam leads qualificados, maximizando o retorno sobre investimento e expandindo sua base de clientes de forma estratégica.</p>
+            </div>
+          </div>
+          <div className="p-6 bg-white rounded-lg shadow-md flex gap-4">
+            <i className="fas fa-chart-line text-3xl text-blue-600 animate-pulse" />
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Análise de Dados</h3>
+              <p>Transforme dados brutos em insights acionáveis com análises avançadas, permitindo decisões estratégicas que otimizam processos e impulsionam o desempenho de vendas.</p>
+            </div>
+          </div>
+          <div className="p-6 bg-white rounded-lg shadow-md flex gap-4">
+            <i className="fas fa-headset text-3xl text-blue-600 animate-bounce" />
+            <div>
+              <h3 className="text-xl font-semibold mb-2">IA para Vendas e Suporte</h3>
+              <p>Automatize processos de vendas e suporte com soluções de IA que personalizam interações, engajam clientes e promovem a fidelização em larga escala.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

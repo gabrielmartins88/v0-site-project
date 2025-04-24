@@ -82,7 +82,7 @@ export default function Home() {
             src="/chamada-home.MP4"
             controls
             playsInline
-            className="relative z-10 w-full max-w-[600px] rounded-lg shadow-lg"
+            className="relative z-10 w-full max-w-[800px] rounded-lg shadow-lg"
             />
             {/*<Image
               src="/placeholder.svg?height=500&width=600"
