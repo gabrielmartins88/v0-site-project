@@ -79,7 +79,7 @@ export default function Home() {
           <div className="md:w-1/2 relative mt-10 md:mt-0">
             <div className="absolute inset-0 bg-gradient-to-r from-[#0066cc] to-[#00a3ff] opacity-50 rounded-full blur-[100px] transform -translate-x-1/4"></div>
             <video
-            src="/videos/chamada-home.MP4"
+            src="/chamada-home.MP4"
             autoPlay
             loop
             muted
