@@ -18,7 +18,7 @@ export default function ChatBot() {
         id: "welcome",
         role: "assistant",
         content:
-          "Hello! I'm the Nexus Solutions assistant. How can I help you today with our cloud solutions or AI services?",
+          "Oi! Tudo bem? Eu sou o Agente X, da Nexus Solutions, e estou aqui pra ajudar seu WhatsApp a trabalhar mais para você! Me conta, o que mais te toma tempo no atendimento hoje?",
       },
     ],
   })
