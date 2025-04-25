@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Nexus Solutions - Customer Cloud",
   description: "Revolucione a experiência do cliente com IA para vender mais e atender melhor",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
