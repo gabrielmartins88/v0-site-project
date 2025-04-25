@@ -1,0 +1,875 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Nexus Solutions</title>
+    <!-- Incluindo Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0F172A; /* Fundo escuro */
+            color: #FFFFFF;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Estilo Geral para Ícones */
+        .live-icon {
+            margin-right: 10px;
+            color: #A3BFFA;
+            transition: transform 0.3s ease;
+        }
+
+        .pulse-icon {
+            animation: iconPulse 2s infinite ease-in-out;
+        }
+
+        .spin-icon {
+            animation: iconSpin 4s infinite linear;
+        }
+
+        .swing-icon {
+            animation: iconSwing 2s infinite ease-in-out;
+        }
+
+        /* Seção Hero */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10" cy="10" r="2" fill="#A3BFFA" opacity="0.5"><animate attributeName="cx" from="10" to="100%" dur="10s" repeatCount="indefinite" /></circle><circle cx="50%" cy="20" r="3" fill="#1E3A8A" opacity="0.5"><animate attributeName="cy" from="20" to="100%" dur="15s" repeatCount="indefinite" /></circle><circle cx="80%" cy="50%" r="2" fill="#A3BFFA" opacity="0.5"><animate attributeName="cx" from="80%" to="0" dur="12s" repeatCount="indefinite" /></circle></svg>');
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            background: linear-gradient(90deg, #00DDEB, #D1D5DB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content h1 .live-icon {
+            font-size: 40px;
+            margin-right: 15px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #D1D5DB;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.2s;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Seção de Caixas de Ação */
+        .action-boxes-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .action-box {
+            background-color: rgba(30, 58, 138, 0.2);
+            border: 2px solid #A3BFFA;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInBox 0.5s ease forwards;
+        }
+
+        .action-box:hover {
+            transform: scale(1.05);
+            border-color: #00DDEB;
+        }
+
+        .action-box i {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .action-box h3 {
+            font-size: 24px;
+            color: #D1D5DB;
+            margin-bottom: 10px;
+        }
+
+        .action-box p {
+            font-size: 14px;
+            color: #A3BFFA;
+        }
+
+        .action-box:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .action-box:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .action-box:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Seção de Formulário de Contato */
+        .contact-form-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .contact-form-section h2 {
+            font-size: 36px;
+            background: linear-gradient(90deg, #00DDEB, #D1D5DB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-form-section h2 .live-icon {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .contact-form-section p {
+            font-size: 16px;
+            color: #D1D5DB;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 14px;
+            color: #D1D5DB;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #D1D5DB;
+            background-color: rgba(30, 58, 138, 0.2);
+            border: 2px solid #A3BFFA;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #00DDEB;
+        }
+
+        .form-group input:focus + label,
+        .form-group textarea:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: #A3BFFA;
+            background-color: #0F172A;
+            padding: 0 5px;
+        }
+
+        .submit-button {
+            background-color: #A3BFFA;
+            color: #0F172A;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .submit-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Seção de Localização */
+        .location-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .location-section h2 {
+            font-size: 36px;
+            background: linear-gradient(90deg, #00DDEB, #D1D5DB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-section h2 .live-icon {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .location-section p {
+            font-size: 16px;
+            color: #D1D5DB;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .location-section iframe {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #1E3A8A;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Seção de FAQs */
+        .faq-section {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .faq-section.visible {
+            display: block;
+        }
+
+        .faq-section h2 {
+            font-size: 36px;
+            background: linear-gradient(90deg, #00DDEB, #D1D5DB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .faq-section h2 .live-icon {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .faq-section .faq-item {
+            background-color: rgba(30, 58, 138, 0.2);
+            border: 1px solid #1E3A8A;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .faq-section .faq-question {
+            padding: 15px 20px;
+            font-size: 18px;
+            color: #D1D5DB;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-section .faq-question .live-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-section .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .faq-section .faq-answer p {
+            font-size: 16px;
+            color: #D1D5DB;
+            padding: 15px 0;
+        }
+
+        .faq-section input[type="checkbox"] {
+            display: none;
+        }
+
+        .faq-section input[type="checkbox"]:checked ~ .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-section input[type="checkbox"]:checked ~ .faq-question .live-icon {
+            transform: rotate(180deg);
+        }
+
+        .close-faq-button {
+            background-color: #A3BFFA;
+            color: #0F172A;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .close-faq-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Botão Flutuante do Agente X */
+        .floating-agentx {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #A3BFFA;
+            border-radius: 50%;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-agentx:hover {
+            transform: scale(1.1);
+        }
+
+        .floating-agentx i {
+            font-size: 30px;
+            color: #0F172A;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #1E3A8A;
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links li a {
+            color: #A3BFFA;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-links li a:hover {
+            color: #FFFFFF;
+        }
+
+        .footer-links li a .live-icon {
+            font-size: 14px;
+        }
+
+        footer p {
+            font-size: 14px;
+            color: #D1D5DB;
+        }
+
+        /* Animações dos Ícones */
+        @keyframes iconPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes iconSwing {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Animações Gerais */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInBox {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(163, 191, 250, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(163, 191, 250, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(163, 191, 250, 0); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 50vh;
+            }
+
+            .hero-content h1 {
+                font-size: 32px;
+            }
+
+            .hero-content h1 .live-icon {
+                font-size: 28px;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+            }
+
+            .action-boxes-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-box i {
+                font-size: 28px;
+            }
+
+            .action-box h3 {
+                font-size: 20px;
+            }
+
+            .action-box p {
+                font-size: 12px;
+            }
+
+            .contact-form-section h2 {
+                font-size: 28px;
+            }
+
+            .contact-form-section h2 .live-icon {
+                font-size: 24px;
+            }
+
+            .contact-form-section p {
+                font-size: 14px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 14px;
+            }
+
+            .form-group label {
+                font-size: 12px;
+            }
+
+            .form-group input:focus + label,
+            .form-group textarea:focus + label,
+            .form-group input:not(:placeholder-shown) + label,
+            .form-group textarea:not(:placeholder-shown) + label {
+                font-size: 10px;
+            }
+
+            .submit-button {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+
+            .location-section h2 {
+                font-size: 28px;
+            }
+
+            .location-section h2 .live-icon {
+                font-size: 24px;
+            }
+
+            .location-section p {
+                font-size: 14px;
+            }
+
+            .location-section iframe {
+                height: 300px;
+            }
+
+            .faq-section h2 {
+                font-size: 28px;
+            }
+
+            .faq-section h2 .live-icon {
+                font-size: 24px;
+            }
+
+            .faq-section .faq-question {
+                font-size: 16px;
+            }
+
+            .faq-section .faq-answer p {
+                font-size: 14px;
+            }
+
+            .close-faq-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .floating-agentx {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px;
+            }
+
+            .floating-agentx i {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Seção Hero -->
+    <section class="hero" id="contact-hero">
+        <div class="particles"></div>
+        <div class="hero-content">
+            <h1><i class="fas fa-envelope live-icon pulse-icon"></i> Fale com a Gente</h1>
+            <p>Converse com nossos consultores especializados para encontrar a melhor solução de automação para o seu negócio, ou acione o Agente X para esclarecer dúvidas de forma rápida e eficiente. Estamos aqui para ajudar sua empresa a crescer com tecnologia de ponta!</p>
+        </div>
+    </section>
+
+    <!-- Seção de Caixas de Ação -->
+    <section class="action-boxes-section">
+        <div class="action-box" onclick="scrollToSection('faq-section')">
+            <i class="fas fa-question-circle live-icon swing-icon"></i>
+            <h3>Central de Ajuda</h3>
+            <p>Encontre respostas para as perguntas mais comuns sobre nossos serviços e processos.</p>
+        </div>
+        <div class="action-box" onclick="window.open('https://wa.me/+5551999999999?text=Olá,%20sou%20cliente%20e%20preciso%20de%20suporte!', '_blank')">
+            <i class="fas fa-headset live-icon pulse-icon"></i>
+            <h3>Já é Nosso Cliente?</h3>
+            <p>Fale diretamente com o Agente X para suporte rápido e personalizado.</p>
+        </div>
+        <div class="action-box" onclick="window.open('https://wa.me/+5551999998888?text=Olá,%20gostaria%20de%20falar%20com%20um%20consultor%20da%20Nexus%20Solutions!', '_blank')">
+            <i class="fas fa-user-tie live-icon spin-icon"></i>
+            <h3>Fale com um Consultor</h3>
+            <p>Agende uma consulta estratégica com um de nossos CEOs para transformar seu negócio.</p>
+        </div>
+    </section>
+
+    <!-- Seção de Formulário de Contato -->
+    <section class="contact-form-section" id="contact-form-section">
+        <h2><i class="fas fa-headset live-icon swing-icon"></i> Envie Sua Mensagem</h2>
+        <p>Preencha o formulário abaixo e nossa equipe entrará em contato o mais rápido possível. Todos os campos são obrigatórios.</p>
+        <div class="contact-form" id="contact-form">
+            <div class="form-group">
+                <input type="text" id="name" placeholder=" " required>
+                <label for="name">Nome</label>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" placeholder=" " required>
+                <label for="email">Email</label>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="phone" placeholder=" " required>
+                <label for="phone">Telefone</label>
+            </div>
+            <div class="form-group">
+                <textarea id="message" placeholder=" " required></textarea>
+                <label for="message">Mensagem</label>
+            </div>
+            <button type="button" class="submit-button" id="submit-contact-form">Enviar Mensagem</button>
+        </div>
+    </section>
+
+    <!-- Seção de Localização -->
+    <section class="location-section" id="location-section">
+        <h2><i class="fas fa-map-marker-alt live-icon pulse-icon"></i> Onde Estamos</h2>
+        <p>Visite-nos em nossa sede em Canoas, Rio Grande do Sul, ou entre em contato online.</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.828558227672!2d-51.18346468477015!3d-29.91897998194355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDU1JzA4LjMiUyA1McKwMTAnNTkuNSJX!5e0!3m2!1spt-BR!2sbr!4v1697234567890!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy"></iframe>
+    </section>
+
+    <!-- Seção de FAQs -->
+    <section class="faq-section" id="faq-section">
+        <h2><i class="fas fa-question-circle live-icon swing-icon"></i> Perguntas Frequentes</h2>
+        <div class="faq-item">
+            <input type="checkbox" id="faq1">
+            <label class="faq-question" for="faq1">
+                Como posso contratar um pacote da Nexus Solutions?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Você pode escolher um pacote diretamente em nossa página de serviços e enviar sua mensagem pelo formulário de contato acima para iniciar o processo.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq2">
+            <label class="faq-question" for="faq2">
+                Os pacotes incluem suporte técnico?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Sim! Todos os pacotes incluem suporte técnico. O Pacote Neo tem suporte básico, enquanto o Trinity e Zion oferecem suporte prioritário e 24/7, respectivamente.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq3">
+            <label class="faq-question" for="faq3">
+                Posso personalizar meu pacote?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Sim, oferecemos o Pacote Personalizado, onde você escolhe os serviços que deseja. Confira os detalhes na página de serviços e envie sua solicitação pelo formulário de contato.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq4">
+            <label class="faq-question" for="faq4">
+                Qual é o prazo para implementação da automação?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>O prazo varia conforme o pacote e a complexidade do projeto. Para o Pacote Neo, a implementação leva cerca de 3 a 5 dias úteis. Pacotes mais avançados, como o Zion, podem levar de 7 a 15 dias úteis.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq5">
+            <label class="faq-question" for="faq5">
+                Quais plataformas de automação vocês suportam?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Dependendo do pacote, suportamos automação em WhatsApp, Instagram, Facebook, email e até integrações com CRMs, ERPs e plataformas de e-commerce como Shopify e WooCommerce.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq6">
+            <label class="faq-question" for="faq6">
+                Como funciona o processo de suporte técnico?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Nosso suporte técnico é realizado por email. Após contratar um pacote, você receberá um email de contato para suporte. Dependendo do pacote, você terá suporte básico, prioritário ou 24/7.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq7">
+            <label class="faq-question" for="faq7">
+                Vocês oferecem treinamento para usar as ferramentas?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Sim, todos os pacotes incluem um treinamento inicial para ajudar sua equipe a usar as ferramentas de automação de forma eficiente. Treinamentos adicionais podem ser solicitados pelo formulário de contato.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <input type="checkbox" id="faq8">
+            <label class="faq-question" for="faq8">
+                Quanto tempo leva para receber uma resposta após enviar o formulário?
+                <i class="fas fa-chevron-down live-icon"></i>
+            </label>
+            <div class="faq-answer">
+                <p>Nosso objetivo é responder dentro de 24 horas úteis. Para solicitações urgentes, mencione isso na sua mensagem e faremos o possível para responder o mais rápido possível.</p>
+            </div>
+        </div>
+        <button class="close-faq-button" onclick="toggleFAQSection()">Fechar</button>
+    </section>
+
+    <!-- Rodapé -->
+    <footer id="contact">
+        <ul class="footer-links">
+            <li><a href="#home"><i class="fas fa-home live-icon pulse-icon"></i> Início</a></li>
+            <li><a href="#services"><i class="fas fa-cogs live-icon spin-icon"></i> Soluções</a></li>
+            <li><a href="#about"><i class="fas fa-info-circle live-icon swing-icon"></i> Sobre</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope live-icon pulse-icon"></i> Contato</a></li>
+        </ul>
+        <p>© 2025 Nexus Solutions Corp. Canoas/RS. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Botão Flutuante do Agente X -->
+    <div class="floating-agentx">
+        <a href="https://wa.me/+5551999999999?text=Olá,%20sou%20cliente%20e%20preciso%20de%20suporte!" target="_blank">
+            <i class="fab fa-whatsapp live-icon pulse-icon"></i>
+        </a>
+    </div>
+
+    <!-- Script para o Formulário de Contato e Scroll Suave -->
+    <script>
+        // Script para o Formulário de Contato
+        document.getElementById('submit-contact-form').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !email || !phone || !message) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const emailSubject = encodeURIComponent('Contato via Formulário - Nexus Solutions');
+            const emailBody = encodeURIComponent(
+                `Nome: ${name}\n` +
+                `Email: ${email}\n` +
+                `Telefone: ${phone}\n` +
+                `Mensagem: ${message}`
+            );
+            const mailtoLink = `mailto:contato@brnexus.com?subject=${emailSubject}&body=${emailBody}`;
+            window.location.href = mailtoLink;
+        });
+
+        // Script para Scroll Suave e Visibilidade do FAQ
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('visible');
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleFAQSection() {
+            const faqSection = document.getElementById('faq-section');
+            if (faqSection) {
+                faqSection.classList.toggle('visible');
+            }
+        }
+    </script>
+</body>
+</html>
